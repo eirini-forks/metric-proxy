@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"regexp"
-	"strings"
 	"time"
 
 	"code.cloudfoundry.org/go-loggregator/rpc/loggregator_v2"
@@ -173,6 +172,5 @@ func (m *Proxy) createGaugeMap(k v1.ResourceName, v resource.Quantity) map[strin
 }
 
 func getInstanceID(podMetric v1beta1.PodMetrics) string {
-	s := strings.Split(podMetric.Name, "-")
-	return s[len(s)-1]
+	return podMetric.Name[len(podMetric.Name)-5:]
 }

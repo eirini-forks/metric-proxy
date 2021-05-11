@@ -2,20 +2,21 @@
 
 set -euo pipefail
 
-REPO_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd )"
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && cd .. && pwd)"
 
 pushd $REPO_DIR
-    make test
+{
+  # make test
 
-    repository="cloudfoundry"
-    tag="dev"
-    image_name="${repository}/metric-proxy:${tag}"
+  repository="eirini"
+  tag="${1:-dev}"
+  image_name="${repository}/metric-proxy:${tag}"
 
-    docker build -t ${image_name} .
-    docker push ${image_name}
+  docker build -t ${image_name} .
+  docker push ${image_name}
 
-    source ${REPO_DIR}/hack/helpers.sh
+  source ${REPO_DIR}/hack/helpers.sh
 
-    updateConfigValues metric-proxy:${tag} metric_proxy
+  updateConfigValues metric-proxy:${tag} metric_proxy
+}
 popd
-
